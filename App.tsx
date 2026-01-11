@@ -1,13 +1,19 @@
 
-import React, { useState } from 'react';
-import { ESAERAK_DATA } from './constants';
-import { View } from './types';
+import React, { useState, useEffect } from 'react';
+import { getIdioms } from './services/storageService';
+import { View, Idiom } from './types';
 import Explorer from './components/Explorer';
 import Flashcards from './components/Flashcards';
 import Quiz from './components/Quiz';
+import AddIdiom from './components/AddIdiom';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('home');
+  const [idioms, setIdioms] = useState<Idiom[]>([]);
+
+  useEffect(() => {
+    setIdioms(getIdioms());
+  }, [currentView]);
 
   const renderHome = () => (
     <div className="max-w-4xl mx-auto px-4 py-12">
@@ -25,45 +31,56 @@ const App: React.FC = () => {
         </p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <button 
           onClick={() => setCurrentView('flashcards')}
-          className="group bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-green-300 transition-all text-left flex flex-col items-start"
+          className="group bg-white p-6 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-green-300 transition-all text-left flex flex-col items-start"
         >
-          <div className="p-3 bg-green-50 text-green-600 rounded-2xl mb-6 group-hover:scale-110 transition-transform">
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          <div className="p-3 bg-green-50 text-green-600 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
           </div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">Ikasteko Kartak</h3>
-          <p className="text-gray-500 text-sm">Esaerak banan-banan errepasatu eta memorizatu.</p>
+          <h3 className="text-lg font-bold text-gray-900 mb-1">Kartak</h3>
+          <p className="text-gray-500 text-xs">Memorizatu esaerak.</p>
         </button>
 
         <button 
           onClick={() => setCurrentView('quiz')}
-          className="group bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-blue-300 transition-all text-left flex flex-col items-start"
+          className="group bg-white p-6 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-blue-300 transition-all text-left flex flex-col items-start"
         >
-          <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl mb-6 group-hover:scale-110 transition-transform">
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+          <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
           </div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">Galdetegia</h3>
-          <p className="text-gray-500 text-sm">Zure ezagutzak probatu joko interaktibo batekin.</p>
+          <h3 className="text-lg font-bold text-gray-900 mb-1">Galdetegia</h3>
+          <p className="text-gray-500 text-xs">Probatu zure ezagutzak.</p>
         </button>
 
         <button 
           onClick={() => setCurrentView('explorer')}
-          className="group bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-orange-300 transition-all text-left flex flex-col items-start"
+          className="group bg-white p-6 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-orange-300 transition-all text-left flex flex-col items-start"
         >
-          <div className="p-3 bg-orange-50 text-orange-600 rounded-2xl mb-6 group-hover:scale-110 transition-transform">
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          <div className="p-3 bg-orange-50 text-orange-600 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
           </div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">Hiztegia</h3>
-          <p className="text-gray-500 text-sm">Guztira {ESAERAK_DATA.length} esaera arakatu eta bilatu.</p>
+          <h3 className="text-lg font-bold text-gray-900 mb-1">Hiztegia</h3>
+          <p className="text-gray-500 text-xs">{idioms.length} esaera guztira.</p>
+        </button>
+
+        <button 
+          onClick={() => setCurrentView('add')}
+          className="group bg-gray-900 p-6 rounded-3xl shadow-sm hover:shadow-xl border border-gray-800 hover:border-green-500 transition-all text-left flex flex-col items-start text-white"
+        >
+          <div className="p-3 bg-green-500/20 text-green-500 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>
+          </div>
+          <h3 className="text-lg font-bold mb-1">Gehitu</h3>
+          <p className="text-gray-400 text-xs">Sartu esaera berriak.</p>
         </button>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Navigation */}
       {currentView !== 'home' && (
         <nav className="sticky top-0 bg-white/80 backdrop-blur-md border-b border-gray-200 z-40">
@@ -73,20 +90,20 @@ const App: React.FC = () => {
               className="flex items-center gap-2 text-gray-900 font-bold heading-font text-lg"
             >
               <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center text-white text-xl">E</div>
-              Esaerak Master
+              <span className="hidden sm:inline">Esaerak Master</span>
             </button>
             <div className="flex gap-2">
               <button 
                 onClick={() => setCurrentView('explorer')} 
-                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${currentView === 'explorer' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                className={`px-3 py-2 rounded-xl text-xs font-bold transition-all ${currentView === 'explorer' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
               >
                 Hiztegia
               </button>
               <button 
-                onClick={() => setCurrentView('quiz')} 
-                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${currentView === 'quiz' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-blue-50'}`}
+                onClick={() => setCurrentView('add')} 
+                className={`px-3 py-2 rounded-xl text-xs font-bold transition-all ${currentView === 'add' ? 'bg-green-600 text-white' : 'text-gray-600 hover:bg-green-50'}`}
               >
-                Jokatu
+                Gehitu
               </button>
             </div>
           </div>
@@ -94,33 +111,40 @@ const App: React.FC = () => {
       )}
 
       {/* Main Content */}
-      <main>
+      <main className="flex-1">
         {currentView === 'home' && renderHome()}
         
         {currentView === 'explorer' && (
-          <Explorer idioms={ESAERAK_DATA} />
+          <Explorer idioms={idioms} />
         )}
 
         {currentView === 'flashcards' && (
           <Flashcards 
-            idioms={ESAERAK_DATA} 
+            idioms={idioms} 
             onClose={() => setCurrentView('home')}
           />
         )}
 
         {currentView === 'quiz' && (
           <Quiz 
-            idioms={ESAERAK_DATA} 
+            idioms={idioms} 
             onClose={() => setCurrentView('home')}
+          />
+        )}
+
+        {currentView === 'add' && (
+          <AddIdiom 
+            onSuccess={() => setCurrentView('explorer')}
+            onCancel={() => setCurrentView('home')}
           />
         )}
       </main>
 
       {/* Footer */}
-      <footer className="py-12 border-t border-gray-200 bg-white mt-auto">
+      <footer className="py-12 border-t border-gray-200 bg-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <p className="text-gray-400 text-sm">
-            &copy; {new Date().getFullYear()} Esaerak Master. Euskara indartzen, flashcard eta quiz bidez.
+            &copy; {new Date().getFullYear()} Esaerak Master. PWA bertsioa.
           </p>
           <div className="flex justify-center gap-4 mt-4">
              <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>

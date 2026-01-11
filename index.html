@@ -4,6 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#16a34a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
     <title>Esaerak Master</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,6 +32,13 @@
         }
         .backface-hidden {
             backface-visibility: hidden;
+        }
+        /* PWA splash screen avoidance */
+        @media (display-mode: standalone) {
+            body {
+                -webkit-user-select: none;
+                user-select: none;
+            }
         }
     </style>
 <script type="importmap">
