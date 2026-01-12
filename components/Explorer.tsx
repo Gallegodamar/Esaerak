@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { Idiom } from '../types';
-import AIAssistant from './AIAssistant';
 
 interface ExplorerProps {
   idioms: Idiom[];
@@ -10,8 +9,6 @@ interface ExplorerProps {
 const Explorer: React.FC<ExplorerProps> = ({ idioms }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
-  // Track which idiom is selected to show the AI explanation modal
-  const [selectedIdiom, setSelectedIdiom] = useState<Idiom | null>(null);
 
   const categories = ['All', ...new Set(idioms.map(i => i.category))];
 
@@ -58,16 +55,10 @@ const Explorer: React.FC<ExplorerProps> = ({ idioms }) => {
         {filteredIdioms.map(idiom => (
           <div 
             key={idiom.id}
-            onClick={() => setSelectedIdiom(idiom)}
-            className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all cursor-pointer hover:border-green-300 hover:shadow-md group"
+            className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all"
           >
             <div className="flex justify-between items-start mb-2">
               <span className="text-xs font-bold text-green-600 uppercase tracking-tighter">{idiom.category}</span>
-              <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-              </div>
             </div>
             <h3 className="text-lg font-bold text-gray-800 mb-1 leading-snug">{idiom.eu}</h3>
             <p className="text-sm text-gray-500 italic">{idiom.es}</p>
@@ -80,14 +71,6 @@ const Explorer: React.FC<ExplorerProps> = ({ idioms }) => {
           </div>
         )}
       </div>
-
-      {/* Render AI Assistant Modal when an idiom is clicked */}
-      {selectedIdiom && (
-        <AIAssistant 
-          idiom={selectedIdiom} 
-          onClose={() => setSelectedIdiom(null)} 
-        />
-      )}
     </div>
   );
 };
