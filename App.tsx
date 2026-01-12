@@ -24,22 +24,22 @@ const App: React.FC = () => {
   };
 
   const renderHome = () => (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <header className="text-center mb-16">
+    <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12">
+      <header className="text-center mb-10 sm:mb-16">
         <div className="inline-block p-4 bg-green-100 rounded-3xl mb-6">
-          <svg className="w-16 h-16 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-12 h-12 sm:w-16 sm:h-16 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
           </svg>
         </div>
-        <h1 className="text-5xl font-extrabold text-gray-900 heading-font tracking-tight mb-4">
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 heading-font tracking-tight mb-4">
           Esaerak <span className="text-green-600">Master</span>
         </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed px-4">
           Euskal esaera zaharrak eta modernoa modu dibertigarrian ikasteko eta praktikatzeko zure tresna nagusia.
         </p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <button 
           onClick={handleFlashcardClick}
           className="group bg-white p-6 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-green-300 transition-all text-left flex flex-col items-start"
@@ -88,8 +88,8 @@ const App: React.FC = () => {
   );
 
   const renderCategorySelector = () => (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <header className="mb-12">
+    <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12">
+      <header className="mb-8 sm:mb-12">
         <button 
           onClick={() => setCurrentView('home')}
           className="flex items-center gap-2 text-green-600 font-bold mb-4 hover:gap-3 transition-all"
@@ -97,7 +97,7 @@ const App: React.FC = () => {
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
           Atzera
         </button>
-        <h1 className="text-4xl font-bold text-gray-900 heading-font mb-2">Aukeratu Kategoria</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 heading-font mb-2">Aukeratu Kategoria</h1>
         <p className="text-gray-600">Hautatu zer talde ikasi nahi duzun gaur.</p>
       </header>
 
@@ -123,32 +123,34 @@ const App: React.FC = () => {
           </button>
         ))}
       </div>
+      {/* Scroll margin for mobile */}
+      <div className="h-12 w-full"></div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex flex-col selection:bg-green-100">
       {/* Navigation */}
       {currentView !== 'home' && (
-        <nav className="sticky top-0 bg-white/80 backdrop-blur-md border-b border-gray-200 z-40">
+        <nav className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-gray-100 z-40">
           <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
             <button 
               onClick={() => setCurrentView('home')}
               className="flex items-center gap-2 text-gray-900 font-bold heading-font text-lg"
             >
               <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center text-white text-xl">E</div>
-              <span className="hidden sm:inline">Esaerak Master</span>
+              <span className="hidden xs:inline">Esaerak Master</span>
             </button>
-            <div className="flex gap-2">
+            <div className="flex gap-1 sm:gap-2">
               <button 
                 onClick={() => setCurrentView('explorer')} 
-                className={`px-3 py-2 rounded-xl text-xs font-bold transition-all ${currentView === 'explorer' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                className={`px-3 py-2 rounded-xl text-xs font-bold transition-all ${currentView === 'explorer' ? 'bg-gray-900 text-white shadow-md' : 'text-gray-600 hover:bg-gray-100'}`}
               >
                 Hiztegia
               </button>
               <button 
                 onClick={() => setCurrentView('add')} 
-                className={`px-3 py-2 rounded-xl text-xs font-bold transition-all ${currentView === 'add' ? 'bg-green-600 text-white' : 'text-gray-600 hover:bg-green-50'}`}
+                className={`px-3 py-2 rounded-xl text-xs font-bold transition-all ${currentView === 'add' ? 'bg-green-600 text-white shadow-md shadow-green-100' : 'text-gray-600 hover:bg-green-50'}`}
               >
                 Gehitu
               </button>
@@ -158,7 +160,7 @@ const App: React.FC = () => {
       )}
 
       {/* Main Content */}
-      <main className="flex-1">
+      <main className="flex-1 overflow-x-hidden">
         {currentView === 'home' && renderHome()}
         
         {currentView === 'explorer' && (
@@ -191,15 +193,15 @@ const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="py-12 border-t border-gray-200 bg-white">
+      <footer className="py-12 border-t border-gray-100 bg-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="text-gray-400 text-sm">
+          <p className="text-gray-400 text-sm font-medium">
             &copy; {new Date().getFullYear()} Esaerak Master. PWA bertsioa.
           </p>
-          <div className="flex justify-center gap-4 mt-4">
-             <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
-             <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-             <div className="w-1.5 h-1.5 bg-gray-200 rounded-full"></div>
+          <div className="flex justify-center gap-3 mt-4 opacity-50">
+             <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" style={{animationDelay: '0s'}}></div>
+             <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+             <div className="w-2 h-2 bg-gray-200 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></div>
           </div>
         </div>
       </footer>
