@@ -10,10 +10,18 @@ import AddIdiom from './components/AddIdiom';
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('home');
   const [idioms, setIdioms] = useState<Idiom[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
     setIdioms(getIdioms());
   }, [currentView]);
+
+  const categories = Array.from(new Set(idioms.map(i => i.category))).sort();
+
+  const handleFlashcardClick = () => {
+    setSelectedCategory(null);
+    setCurrentView('flashcards');
+  };
 
   const renderHome = () => (
     <div className="max-w-4xl mx-auto px-4 py-12">
@@ -33,14 +41,14 @@ const App: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <button 
-          onClick={() => setCurrentView('flashcards')}
+          onClick={handleFlashcardClick}
           className="group bg-white p-6 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-green-300 transition-all text-left flex flex-col items-start"
         >
           <div className="p-3 bg-green-50 text-green-600 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
           </div>
           <h3 className="text-lg font-bold text-gray-900 mb-1">Kartak</h3>
-          <p className="text-gray-500 text-xs">Memorizatu esaerak.</p>
+          <p className="text-gray-500 text-xs">Aukeratu kategoria bat.</p>
         </button>
 
         <button 
@@ -75,6 +83,45 @@ const App: React.FC = () => {
           <h3 className="text-lg font-bold mb-1">Gehitu</h3>
           <p className="text-gray-400 text-xs">Sartu esaera berriak.</p>
         </button>
+      </div>
+    </div>
+  );
+
+  const renderCategorySelector = () => (
+    <div className="max-w-4xl mx-auto px-4 py-12">
+      <header className="mb-12">
+        <button 
+          onClick={() => setCurrentView('home')}
+          className="flex items-center gap-2 text-green-600 font-bold mb-4 hover:gap-3 transition-all"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          Atzera
+        </button>
+        <h1 className="text-4xl font-bold text-gray-900 heading-font mb-2">Aukeratu Kategoria</h1>
+        <p className="text-gray-600">Hautatu zer talde ikasi nahi duzun gaur.</p>
+      </header>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <button
+          onClick={() => setSelectedCategory('Guztiak')}
+          className="p-8 bg-gray-900 text-white rounded-3xl shadow-lg hover:scale-[1.02] transition-all text-center border-4 border-transparent hover:border-green-500"
+        >
+          <span className="text-2xl font-bold block mb-1">Guztiak</span>
+          <span className="text-gray-400 text-sm">{idioms.length} esaera</span>
+        </button>
+        
+        {categories.map(cat => (
+          <button
+            key={cat}
+            onClick={() => setSelectedCategory(cat)}
+            className="p-8 bg-white text-gray-900 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md hover:border-green-200 transition-all text-center group"
+          >
+            <span className="text-xl font-bold block mb-1 group-hover:text-green-600 transition-colors">{cat}</span>
+            <span className="text-gray-400 text-sm">
+              {idioms.filter(i => i.category === cat).length} esaera
+            </span>
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -119,10 +166,13 @@ const App: React.FC = () => {
         )}
 
         {currentView === 'flashcards' && (
-          <Flashcards 
-            idioms={idioms} 
-            onClose={() => setCurrentView('home')}
-          />
+          !selectedCategory ? renderCategorySelector() : (
+            <Flashcards 
+              idioms={selectedCategory === 'Guztiak' ? idioms : idioms.filter(i => i.category === selectedCategory)} 
+              categoryName={selectedCategory}
+              onClose={() => setSelectedCategory(null)}
+            />
+          )
         )}
 
         {currentView === 'quiz' && (

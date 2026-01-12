@@ -4,10 +4,11 @@ import { Idiom } from '../types';
 
 interface FlashcardsProps {
   idioms: Idiom[];
+  categoryName: string;
   onClose: () => void;
 }
 
-const Flashcards: React.FC<FlashcardsProps> = ({ idioms, onClose }) => {
+const Flashcards: React.FC<FlashcardsProps> = ({ idioms, categoryName, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -27,11 +28,23 @@ const Flashcards: React.FC<FlashcardsProps> = ({ idioms, onClose }) => {
     }, 150);
   };
 
+  if (idioms.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center p-12">
+        <p className="text-gray-500 mb-4">Ez dago esaerarik kategoria honetan.</p>
+        <button onClick={onClose} className="px-6 py-2 bg-green-600 text-white rounded-xl">Atzera</button>
+      </div>
+    );
+  }
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl">
         <div className="p-4 bg-green-600 text-white flex justify-between items-center">
-          <h2 className="font-bold">Ikasketa Kartak ({currentIndex + 1}/{idioms.length})</h2>
+          <h2 className="font-bold flex flex-col">
+            <span className="text-[10px] opacity-75 uppercase tracking-widest">{categoryName}</span>
+            <span>Ikasketa Kartak ({currentIndex + 1}/{idioms.length})</span>
+          </h2>
           <button onClick={onClose} className="hover:bg-green-700 p-1 rounded">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
           </button>
